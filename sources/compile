@@ -1,0 +1,1 @@
+g++ Sampler.cpp Tree.cpp Data.cpp Random.cpp main.cpp -o ../data/mcmc
