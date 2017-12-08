@@ -4,6 +4,10 @@
 #include "Tree.h"
 
 class Sampler	{
+	
+	private:
+		Tree* tree;
+		Data* data;
 
 	public:
 
