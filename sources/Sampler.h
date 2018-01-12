@@ -55,7 +55,7 @@ class Sampler	{
 	// log likelihood should be computed independently for each site
 	double SiteLogLikelihood(int site);
 
-	double* RecursiveConditionnalSiteLikelihood(int site, Node* node);
+	void RecursiveConditionnalSiteLikelihood(int site, Node* node);
 	
 	// and for each site, should implement a recursive function across all nodes of the tree
 	void Pruning(int site, Node* node);

@@ -20,8 +20,8 @@ double Sampler::GetLogLikelihood()	{
 }
 
 double Sampler::SiteLogLikelihood(int site)	{
-	RecursiveConditionnalSiteLikelihood(site, tree->root);
-	double* likelihood_root = root->condl;
+	RecursiveConditionnalSiteLikelihood(site, tree->GetRoot());
+	double* likelihood_root = tree->GetRoot()->condl;
 	double likelihood = 0;
 	for(int i = 0 ; i < 4 ; i++){
 		likelihood += likelihood_root[i];
@@ -67,12 +67,12 @@ void Sampler::RecursiveConditionnalSiteLikelihood(int site, Node* node){
 }
 
 int Sampler::RateMove(double tuning)	{
-	this.rate = abs(sNormal()) + this.rate;
+	this.rate = abs(sNormal()) + this->rate;
 	return 0;
 }
 
 int Sampler::TimeMove(double tuning)	{
-	tree.ProposeTimeMove(tuning);
+	tree->ProposeTimeMove(tuning);
 	return 0;
 }
 
