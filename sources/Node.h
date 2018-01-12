@@ -1,4 +1,5 @@
-
+#ifndef __NODE_H__
+ #define __NODE_H__
 
 const int Nstate = 4;
 
@@ -99,3 +100,4 @@ class Node	{
 	double time;
 
 };
+#endif

@@ -1,4 +1,5 @@
-
+#ifndef __DATA_H__ 
+ #define __DATA_H__
 // this class implements a container for a genetic dataset
 // which is an alignment of <Ntaxa> DNA sequences, each of length <Nsite>
 
@@ -38,3 +39,4 @@ class Data	{
 	string*namelist;
 
 };
+#endif

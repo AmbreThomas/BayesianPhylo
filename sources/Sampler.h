@@ -1,4 +1,5 @@
-
+#ifndef __SAMPLER_H__
+ #define __SAMPLER_H__
 #include "Random.h"
 #include "Data.h"
 #include "Tree.h"
@@ -120,4 +121,4 @@ class Sampler	{
 	Tree* tree;
 	double rate;
 };
-
+#endif
