@@ -6,9 +6,12 @@
 // -----------------
 
 void Tree::ProposeTimeMove(double tuning)	{
-
 	// choose an internal node at random
 	// move its age within allowed interval
+	Node* node = ChooseInternalNodeAtRandom();
+	double time_up = node->up->time;
+	double time_down = node->left->time;
+	node->time = time_up + Random::Uniform() * (time_down - time_up);
 }
 
 // -----------------

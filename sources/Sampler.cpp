@@ -69,6 +69,7 @@ int Sampler::RateMove(double tuning)	{
 }
 
 int Sampler::TimeMove(double tuning)	{
+	tree.ProposeTimeMove(tuning);
 	return 0;
 }
 
