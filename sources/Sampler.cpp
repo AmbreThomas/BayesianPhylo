@@ -30,7 +30,7 @@ double Sampler::SiteLogLikelihood(int site)	{
 }
 
 void Sampler::RecursiveConditionnalSiteLikelihood(int site, Node* node){
-	double likelihood [4] = {0,0,0,0};
+	double* likelihood = node->condl;
 	if(! node->left){
 		int state = data->GetState(node->GetNodeName(),site);
 		if(state==-1){
@@ -39,7 +39,13 @@ void Sampler::RecursiveConditionnalSiteLikelihood(int site, Node* node){
 			}
 		}
 		else{
-			likelihood[state] = 1;
+			for(int i = 0 ; i < 4 ; i++){
+				if(i!=state){
+				likelihood[i] = 0;
+			}else{
+				likelihood[i] = 1;
+				}
+			}
 		}
 	}else{
 		RecursiveConditionnalSiteLikelihood(site, node->left);
@@ -63,25 +69,51 @@ void Sampler::RecursiveConditionnalSiteLikelihood(int site, Node* node){
 			likelihood[i] = ((1-exp_left)*sum_left/4+exp_left*likelihood_left[i]) * ((1-exp_right)*sum_right/4+exp_right*likelihood_right[i]);
 		}
 	}
-	node->condl = likelihood;
 }
 
 int Sampler::RateMove(double tuning)	{
-	this->rate = abs(Random::sNormal()) + this->rate;
-	return 0;
+	double backupRate = this->rate;
+	this->rate = abs(Random::sNormal() * tuning + this->rate);
+	double newLogLikelihood = GetLogLikelihood();
+	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform())){
+		this->rate = backupRate;
+		return 0;
+	}else{
+		logLikelihoodBackup = newLogLikelihood;
+		return 1;
+	}
 }
 
 int Sampler::TimeMove(double tuning)	{
+	tree->Backup();
 	tree->ProposeTimeMove(tuning);
-	return 0;
+	double newLogLikelihood = GetLogLikelihood();
+	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform())){
+		tree->Restore();
+		return 0;
+	}else{
+		logLikelihoodBackup = newLogLikelihood;
+		return 1;
+	}
 }
 
 int Sampler::TopoMove()	{
+	tree->Backup();
 	tree->ProposeSPRMove();
-	return 0;
+	double newLogLikelihood = GetLogLikelihood();
+	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform())){
+		tree->Restore();
+		return 0;
+	}else{
+		logLikelihoodBackup = newLogLikelihood;
+		return 1;
+	}
 }
 
 void Sampler::Cycle()	{
+	acceptedRateMove += RateMove(0.1);
+	acceptedTimeMove += TimeMove(0.1);
+	acceptedTopoMove += TopoMove();
 }
 
 

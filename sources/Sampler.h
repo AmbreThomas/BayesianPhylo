@@ -1,5 +1,6 @@
 #ifndef __SAMPLER_H__
  #define __SAMPLER_H__
+#include <fstream>
 #include "Random.h"
 #include "Data.h"
 #include "Tree.h"
@@ -24,15 +25,21 @@ class Sampler	{
 	// MCMC
 	// run a MCMC chain and regularly save state into files with specified name (+ extensions)
 	void Run(string name)	{
+		acceptedRateMove = 0;
+		acceptedTimeMove = 0;
+		acceptedTopoMove = 0;
+		int nbCycle = 0;
 
 		ofstream os((name + ".trace").c_str());
 		TraceHeader(os);
 		ofstream tos((name + ".treelist").c_str());
-
+		ofstream accos((name+".acceptation").c_str());
 		while (1)	{
 			Cycle();
+			nbCycle++;
 			Trace(os);
 			WriteTree(tos);
+			accos << "NbCycle : "<< nbCycle << "\tacceptedRateMove : " << acceptedRateMove <<"\tacceptedTimeMove : " << acceptedTimeMove << "\tacceptedTopoMove : " << acceptedTopoMove << "\n";
 		}
 	}
 
@@ -120,5 +127,9 @@ class Sampler	{
 	Data* data;
 	Tree* tree;
 	double rate;
+	double logLikelihoodBackup;
+	int acceptedRateMove;
+	int acceptedTimeMove;
+	int acceptedTopoMove;
 };
 #endif

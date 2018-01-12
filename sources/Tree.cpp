@@ -1,4 +1,4 @@
-
+#include <algorithm>
 #include "Tree.h"
 
 // -----------------
@@ -10,8 +10,16 @@ void Tree::ProposeTimeMove(double tuning)	{
 	// move its age within allowed interval
 	Node* node = ChooseInternalNodeAtRandom();
 	double time_up = node->up->time;
-	double time_down = node->left->time;
-	node->time = time_up + Random::Uniform() * (time_down - time_up);
+	double time_down = max(node->left->time,node->right->time);
+	node->time += (time_down - time_up) * tuning * (Random::Uniform() - 0.5);
+	double range = time_up - time_down;
+	while(node->time < time_down || node->time > time_up){
+			if(node->time < time_down){
+				node->time = 2 * time_down - node->time;
+			}else{
+				node->time = 2 * time_up -  node->time;
+			}
+		}
 }
 
 // -----------------
