@@ -1,5 +1,7 @@
-
+#include "Random.h"
 #include "Sampler.h"
+#include <cmath>
+#include "Tree.h"
 
 // -----------------
 // TO BE IMPLEMENTED
@@ -65,6 +67,7 @@ void Sampler::RecursiveConditionnalSiteLikelihood(int site, Node* node){
 }
 
 int Sampler::RateMove(double tuning)	{
+	this.rate = abs(sNormal()) + this.rate;
 	return 0;
 }
 
@@ -74,6 +77,7 @@ int Sampler::TimeMove(double tuning)	{
 }
 
 int Sampler::TopoMove()	{
+	ProposeSPRMove();
 	return 0;
 }
 
