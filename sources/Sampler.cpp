@@ -77,7 +77,7 @@ int Sampler::TimeMove(double tuning)	{
 }
 
 int Sampler::TopoMove()	{
-	ProposeSPRMove();
+	tree.ProposeSPRMove();
 	return 0;
 }
 

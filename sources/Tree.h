@@ -1,4 +1,5 @@
-
+#ifndef __TREE_H__
+ #define __TREE_H__
 #include "Node.h"
 
 class Tree	{
@@ -112,4 +113,4 @@ class Tree	{
 	// the root node
 	Node* root;
 };
-
+#endif
