@@ -75,7 +75,7 @@ int Sampler::RateMove(double tuning)	{
 	double backupRate = this->rate;
 	this->rate = abs(Random::sNormal() * tuning + this->rate);
 	double newLogLikelihood = GetLogLikelihood();
-	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform())){
+	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform()) && logLikelihoodBackup != 0){
 		this->rate = backupRate;
 		return 0;
 	}else{
@@ -88,7 +88,7 @@ int Sampler::TimeMove(double tuning)	{
 	tree->Backup();
 	tree->ProposeTimeMove(tuning);
 	double newLogLikelihood = GetLogLikelihood();
-	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform())){
+	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform()) && logLikelihoodBackup != 0){
 		tree->Restore();
 		return 0;
 	}else{
@@ -101,7 +101,7 @@ int Sampler::TopoMove()	{
 	tree->Backup();
 	tree->ProposeSPRMove();
 	double newLogLikelihood = GetLogLikelihood();
-	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform())){
+	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform()) && logLikelihoodBackup != 0){
 		tree->Restore();
 		return 0;
 	}else{
@@ -111,8 +111,8 @@ int Sampler::TopoMove()	{
 }
 
 void Sampler::Cycle()	{
-	acceptedRateMove += RateMove(0.1);
-	acceptedTimeMove += TimeMove(0.1);
+	acceptedRateMove += RateMove(0.02);
+	acceptedTimeMove += TimeMove(0.04);
 	acceptedTopoMove += TopoMove();
 }
 
