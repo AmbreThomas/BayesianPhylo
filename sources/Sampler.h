@@ -28,16 +28,14 @@ class Sampler	{
 		acceptedRateMove = 0;
 		acceptedTimeMove = 0;
 		acceptedTopoMove = 0;
-		int nbCycle = 0;
 
 		ofstream os((name + ".trace").c_str());
 		TraceHeader(os);
 		ofstream tos((name + ".treelist").c_str());
 		ofstream accos((name+".acceptation").c_str());
 		accos << "NbCycle\tacceptedRateMove\tacceptedTimeMove\tacceptedTopoMove\n";
-		while (1)	{
+		for (int nbCycle = 1 ; nbCycle <= 100000 ; nbCycle++)	{
 			Cycle();
-			nbCycle++;
 			Trace(os);
 			WriteTree(tos);
 			accos << nbCycle << "\t" << acceptedRateMove <<"\t" << acceptedTimeMove << "\t" << acceptedTopoMove << "\n";

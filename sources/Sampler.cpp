@@ -111,8 +111,8 @@ int Sampler::TopoMove()	{
 }
 
 void Sampler::Cycle()	{
-	acceptedRateMove += RateMove(0.02);
-	acceptedTimeMove += TimeMove(0.04);
+	acceptedRateMove += RateMove(0.015);
+	acceptedTimeMove += TimeMove(1.6);
 	acceptedTopoMove += TopoMove();
 }
 
