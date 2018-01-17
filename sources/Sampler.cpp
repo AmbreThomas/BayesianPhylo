@@ -7,6 +7,10 @@
 // TO BE IMPLEMENTED
 // -----------------
 
+double Sampler::GetLogProb(){
+	return GetLogPrior() + GetLogLikelihood();
+}
+
 double Sampler::GetLogPrior()	{
 	return -rate;
 }
@@ -74,12 +78,12 @@ void Sampler::RecursiveConditionnalSiteLikelihood(int site, Node* node){
 int Sampler::RateMove(double tuning)	{
 	double backupRate = this->rate;
 	this->rate = abs(Random::sNormal() * tuning + this->rate);
-	double newLogLikelihood = GetLogLikelihood();
-	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform()) && logLikelihoodBackup != 0){
+	double newLogProb = GetLogProb();
+	if(newLogProb-logProbBackup < 0 && newLogProb-logProbBackup < log(Random::Uniform()) && logProbBackup != 0){
 		this->rate = backupRate;
 		return 0;
 	}else{
-		logLikelihoodBackup = newLogLikelihood;
+		logProbBackup = newLogProb;
 		return 1;
 	}
 }
@@ -87,12 +91,12 @@ int Sampler::RateMove(double tuning)	{
 int Sampler::TimeMove(double tuning)	{
 	tree->Backup();
 	tree->ProposeTimeMove(tuning);
-	double newLogLikelihood = GetLogLikelihood();
-	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform()) && logLikelihoodBackup != 0){
+	double newLogProb = GetLogProb();
+	if(newLogProb-logProbBackup < 0 && newLogProb-logProbBackup < log(Random::Uniform()) && logProbBackup != 0){
 		tree->Restore();
 		return 0;
 	}else{
-		logLikelihoodBackup = newLogLikelihood;
+		logProbBackup = newLogProb;
 		return 1;
 	}
 }
@@ -100,12 +104,12 @@ int Sampler::TimeMove(double tuning)	{
 int Sampler::TopoMove()	{
 	tree->Backup();
 	tree->ProposeSPRMove();
-	double newLogLikelihood = GetLogLikelihood();
-	if(newLogLikelihood-logLikelihoodBackup < 0 && newLogLikelihood-logLikelihoodBackup < log(Random::Uniform()) && logLikelihoodBackup != 0){
+	double newLogProb = GetLogProb();
+	if(newLogProb-logProbBackup < 0 && newLogProb-logProbBackup < log(Random::Uniform()) && logProbBackup != 0){
 		tree->Restore();
 		return 0;
 	}else{
-		logLikelihoodBackup = newLogLikelihood;
+		logProbBackup = newLogProb;
 		return 1;
 	}
 }

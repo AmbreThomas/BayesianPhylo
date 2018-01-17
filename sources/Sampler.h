@@ -126,7 +126,7 @@ class Sampler	{
 	Data* data;
 	Tree* tree;
 	double rate;
-	double logLikelihoodBackup;
+	double logProbBackup;
 	int acceptedRateMove;
 	int acceptedTimeMove;
 	int acceptedTopoMove;
